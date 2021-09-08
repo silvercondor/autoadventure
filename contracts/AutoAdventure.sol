@@ -21,6 +21,15 @@ interface Irarity{
     function safeTransferFrom(address, address, uint) external;
 }
 
+interface Icellar{
+    //Views
+    function adventurers_log(uint) external view returns(uint);
+    function scout(uint) external view returns(uint);
+
+    //Calls
+    function adventure(uint) external;
+}
+
 contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
         
     mapping(address=>uint[]) public addressToCharacterMap;
@@ -95,18 +104,49 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
         delete addressToCharacterMap[msg.sender];
     }
     
+    function _adventure(uint charId) internal{
+            //normal adventure
+            rarity.adventure(charId);
+            //cellar adventure
+            if (Icellar(0x2A0F1cB17680161cF255348dDFDeE94ea8Ca196A).scout(charId)>0){
+                //adventure if scout success
+                Icellar(0x2A0F1cB17680161cF255348dDFDeE94ea8Ca196A).adventure(charId);
+        }
+    }
 
     function startAdventure(uint[] calldata ids) external{
         //Note: from a UI perspective it is more efficient to read the ids and call this function
-        for(uint i=0; i<ids.length; i++){
-            rarity.adventure(ids[i]);
+        for(uint i=0; i<ids.length; i++){            
+            try _adventure(ids[i]){
+
+            }catch{
+
+            }
         }
     }
     
     function savedCharsAdventure() external{
         uint[] memory ids=addressToCharacterMap[msg.sender];
         for(uint i=0; i<ids.length;i++){
-            rarity.adventure(ids[i]);
+            //normal adventure
+            try _adventure(ids[i]){
+
+            }catch{
+
+            } 
+            //
+        }
+    }
+
+    function savedCharsLvlUp() external{
+        uint[] memory ids=addressToCharacterMap[msg.sender];
+        for (uint i=0; i<ids.length;i++){
+            try rarity.level_up(ids[i]){
+
+            }catch{
+
+            }            
+
         }
     }
     
@@ -116,10 +156,16 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
             rarity.safeTransferFrom(msg.sender, to, ids[i]);
         }
     }
+
+    function summonOne(uint charType) external{
+        rarity.summon(i);
+        addressToCharacterMap[msg.sender].push(tokenId);
+        rarity.safeTransferFrom(address(this), msg.sender, tokenId);
+    }
     
     function summonAll() external{
         uint tokenId=rarity.next_summoner();
-        for(uint i=1;i<11;i++){
+        for(uint i=1;i<=11;i++){
             rarity.summon(i);
             addressToCharacterMap[msg.sender].push(tokenId);
             rarity.safeTransferFrom(address(this), msg.sender, tokenId);
