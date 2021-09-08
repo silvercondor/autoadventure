@@ -269,6 +269,13 @@
   },
   {
     "inputs": [],
+    "name": "savedCharsClaimGold",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "savedCharsLvlUp",
     "outputs": [],
     "stateMutability": "nonpayable",
