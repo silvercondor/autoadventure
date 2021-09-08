@@ -30,6 +30,10 @@ interface Icellar{
     function adventure(uint) external;
 }
 
+interface Igold{
+    function claim(uint) external;
+}
+
 contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
         
     mapping(address=>uint[]) public addressToCharacterMap;
@@ -143,6 +147,19 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
 
             }            
 
+        }
+    }
+
+    function savedCharsClaimGold() external{
+        //try catch used as claimable function goes thru the same checks as claim
+        //hence it is more efficient to attempt to claim directly
+        uint[] memory ids=addressToCharacterMap[msg.sender];
+        for (uint i=0; i<ids.length; i++){
+            try Igold(0x2069B76Afe6b734Fb65D1d099E7ec64ee9CC76B2).claim(ids[i]){
+
+            }catch{
+
+            }
         }
     }
 
