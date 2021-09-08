@@ -15,7 +15,8 @@ async function main() {
 
   // We get the contract to deploy
   const contractAddr="0xf3630d28E451C63fCFD5eCdEF6fD7c87379911a0"
-  const autoAdventure = await upgrades.upgradeProxy(contractAddr, {kind:'uups'})
+  const AutoAdventure = await ethers.getContractFactory("AutoAdventure")
+  const autoAdventure = await upgrades.upgradeProxy(contractAddr, AutoAdventure)
 
   await autoAdventure.deployed();
   console.log(`contract deployed at address ${autoAdventure.address}`)
