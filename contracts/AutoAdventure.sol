@@ -106,7 +106,11 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
     
     function _adventure(uint charId) internal{
             //normal adventure
-            rarity.adventure(charId);
+            try rarity.adventure(charId){
+
+            }catch{
+
+            }
             //cellar adventure
             if (Icellar(0x2A0F1cB17680161cF255348dDFDeE94ea8Ca196A).scout(charId)>0){
                 //adventure if scout success
@@ -117,11 +121,7 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
     function startAdventure(uint[] calldata ids) external{
         //Note: from a UI perspective it is more efficient to read the ids and call this function
         for(uint i=0; i<ids.length; i++){            
-            try _adventure(ids[i]){
-
-            }catch{
-
-            }
+            _adventure(ids[i]);
         }
     }
     
@@ -129,12 +129,7 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
         uint[] memory ids=addressToCharacterMap[msg.sender];
         for(uint i=0; i<ids.length;i++){
             //normal adventure
-            try _adventure(ids[i]){
-
-            }catch{
-
-            } 
-            //
+            _adventure(ids[i]);        
         }
     }
 
@@ -165,7 +160,8 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
     }
 
     function summonOne(uint charType) external{
-        rarity.summon(i);
+        uint tokenId=rarity.next_summoner();
+        rarity.summon(charType);
         addressToCharacterMap[msg.sender].push(tokenId);
         rarity.safeTransferFrom(address(this), msg.sender, tokenId);
     }
