@@ -139,6 +139,7 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
     }
 
     function savedCharsLvlUp() external{
+        //try catch used as reading the xp required is very costly and should be done offchain
         uint[] memory ids=addressToCharacterMap[msg.sender];
         for (uint i=0; i<ids.length;i++){
             try rarity.level_up(ids[i]){
@@ -147,6 +148,12 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
 
             }            
 
+        }
+    }
+
+    function batchLvlUp(uint[] calldata ids) external{
+        for (uint i=0;i<ids.length;i++){
+            rarity.level_up(ids[i]);
         }
     }
     
