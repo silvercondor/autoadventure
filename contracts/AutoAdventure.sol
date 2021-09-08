@@ -142,7 +142,8 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
         uint[] memory ids=addressToCharacterMap[msg.sender];
         for (uint i=0; i<ids.length;i++){
             try rarity.level_up(ids[i]){
-
+                //Claim gold on level uo
+                Igold(0x2069B76Afe6b734Fb65D1d099E7ec64ee9CC76B2).claim(ids[i]);
             }catch{
 
             }            
