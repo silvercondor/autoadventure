@@ -1,15 +1,11 @@
-# Basic Sample Hardhat Project
+# Auto Adventure
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+Easy management for rarity adventure
 
-Try running some of the following tasks:
+## Contracts
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
+ERC1967 Proxy deployed at 0xf3630d28E451C63fCFD5eCdEF6fD7c87379911a0
+
+Implementation
+0x6C8865b3Ca8DE172f6D0FD77302Ebbe825FAa0aD
+
