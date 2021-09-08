@@ -13,6 +13,7 @@ interface Irarity{
     function balanceOf(address) external view returns(uint);
     function xp(uint) external view returns(uint);
     function xp_required(uint) external view returns(uint);    
+    function level(uint) external view returns(uint);
     
     //Calls
     function adventure(uint) external;
@@ -164,9 +165,22 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
         }
     }
 
+    function batchCheckLvlUp(address userAddress) public view returns(uint[] memory){
+        uint[] memory ids = addressToCharacterMap[userAddress];
+        uint[] memory resArr = new uint[](ids.length);
+        for (uint i=0;i<ids.length;i++){
+            resArr[i]=(rarity.xp(ids[i]) >= rarity.xp_required(rarity.level(ids[i]))?ids[i]:0);
+        }
+        return resArr;
+    }    
+
     function batchLvlUp(uint[] calldata ids) external{
         for (uint i=0;i<ids.length;i++){
-            rarity.level_up(ids[i]);
+            try rarity.level_up(ids[i]){
+
+            }catch{
+
+            }
         }
     }
     
