@@ -1,4 +1,5 @@
 const {ethers, upgrades}=require('hardhat')
+const {initImpl}=require('./init-impl')
 // We require the Hardhat Runtime Environment explicitly here. This is optional
 // but useful for running the script in a standalone fashion through `node <script>`.
 //
@@ -18,7 +19,15 @@ async function main() {
   const autoAdventure = await upgrades.deployProxy(AutoAdventure, {kind:'uups'})
 
   await autoAdventure.deployed();
-  console.log(`contract deployed at address ${autoAdventure.address}`)
+  const implAddress = await upgrades.erc1967.getImplementationAddress(autoAdventure.address);
+  
+  console.log(`implementation address: $${implAddress}`)
+  console.log(`proxy address: ${autoAdventure.address}`)
+
+  //uups proxy vulnerability fix
+  //More info: https://forum.openzeppelin.com/t/security-advisory-initialize-uups-implementation-contracts/15301
+  await initImpl(implAddress)
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

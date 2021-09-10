@@ -34,7 +34,7 @@ module.exports = {
     fantom:{
       url:"https://rpc.ftm.tools/",
       chainId:250,
-      gasPrice:71*10**9,
+      gasPrice:91*10**9,
       accounts:[`0x${process.env.PRD_PRIVATE_KEY}`]
     }
   },
