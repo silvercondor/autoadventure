@@ -32,6 +32,10 @@ interface Icellar{
 }
 
 interface Igold{
+    //Views
+    function claimable(uint) external view returns(uint);
+
+    //Calls
     function claim(uint) external;
 }
 
@@ -143,8 +147,7 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
         uint[] memory ids=addressToCharacterMap[msg.sender];
         for (uint i=0; i<ids.length;i++){
             try rarity.level_up(ids[i]){
-                //Claim gold on level uo
-                Igold(0x2069B76Afe6b734Fb65D1d099E7ec64ee9CC76B2).claim(ids[i]);
+                
             }catch{
 
             }            
@@ -153,6 +156,7 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
     }
 
     function savedCharsClaimGold() external{
+        //requires approve for each summoner on rarity contract
         //try catch used as claimable function goes thru the same checks as claim
         //hence it is more efficient to attempt to claim directly
         uint[] memory ids=addressToCharacterMap[msg.sender];
@@ -166,6 +170,7 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
     }
 
     function batchCheckLvlUp(address userAddress) public view returns(uint[] memory){
+        //try to avoid calling in transaction
         uint[] memory ids = addressToCharacterMap[userAddress];
         uint[] memory resArr = new uint[](ids.length);
         for (uint i=0;i<ids.length;i++){
@@ -177,8 +182,29 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
     function batchLvlUp(uint[] calldata ids) external{
         for (uint i=0;i<ids.length;i++){
             try rarity.level_up(ids[i]){
-                //claim gold on lvl up
-                Igold(0x2069B76Afe6b734Fb65D1d099E7ec64ee9CC76B2).claim(ids[i]);
+                
+            }catch{
+
+            }
+        }
+    }
+
+    function batchCheckClaimGold(address userAddress) public view returns(uint[] memory){
+        //try to avoid calling in transaction
+        uint[] memory ids = addressToCharacterMap[userAddress];
+        uint[] memory resArr = new uint[](ids.length);
+        for (uint i=0;i<ids.length;i++){
+            resArr[i]=Igold(0x2069B76Afe6b734Fb65D1d099E7ec64ee9CC76B2).claimable(ids[i])>0?ids[i]:0;
+        }
+        return resArr;
+    }
+
+    function batchClaimGold(uint [] calldata ids) external{
+        //requires approve on rarity contract for each summoner id
+        //claiming is expensive
+        for(uint i=0; i<ids.length;i++){
+            try Igold(0x2069B76Afe6b734Fb65D1d099E7ec64ee9CC76B2).claim(ids[i]){
+
             }catch{
 
             }
