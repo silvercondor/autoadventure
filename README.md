@@ -2,9 +2,17 @@
 
 Easy management for rarity adventure
 
+Tips appreciated: 0xe03668da90Bd2BE45B43Ca4B84923dB761Ca9D7A
+
+
+**IMPORTANT**
+
 Contracts are untested, use at own risk. I bear no responsibility for the loss of any assets
 
-Tips appreciated: 0xe03668da90Bd2BE45B43Ca4B84923dB761Ca9D7A
+I am using a proxy implementation to keep up with the pace of game development. 
+
+It is always best to deploy your own proxy from the code here.
+
 
 ---
 
