@@ -54,6 +54,7 @@ contract MultiClaimer is UUPSUpgradeable, OwnableUpgradeable{
         for(uint i=0;i<ids.length;i++){
             resArr[i]=Icellar(cellarAddress).scout(ids[i])>0?ids[i]:0;
         }
+        return resArr;
     }
 
     function multiCellar(address cellarAddress, uint[] calldata ids) external {
