@@ -124,7 +124,7 @@ contract AutoAdventure is OwnableUpgradeable, UUPSUpgradeable {
             //if (Icellar(0x2A0F1cB17680161cF255348dDFDeE94ea8Ca196A).scout(charId)>0){
                 //adventure if scout success
                 //Icellar(0x2A0F1cB17680161cF255348dDFDeE94ea8Ca196A).adventure(charId);
-        }
+        // }
     }
 
     function startAdventure(uint[] calldata ids) external{
