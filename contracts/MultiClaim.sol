@@ -52,7 +52,7 @@ contract MultiClaimer is UUPSUpgradeable, OwnableUpgradeable{
     function multiScout(address cellarAddress, uint[] calldata ids) public view returns (uint[] memory){
         uint[] memory resArr=new uint[](ids.length);
         for(uint i=0;i<ids.length;i++){
-            resArr[i]=Icellar(cellarAddress).scout(ids[i])>0?ids[i]:0;
+            resArr[i]=(Icellar(cellarAddress).scout(ids[i])>0) && (Icellar(cellarAddress).adventurers_log(ids[i]) + 1 days <= block.timestamp) ? ids[i] :0;
         }
         return resArr;
     }
