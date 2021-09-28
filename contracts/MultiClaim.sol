@@ -12,6 +12,15 @@ interface Iclaimable {
     function claim(uint _summoner) external;
 }
 
+interface Icellar{
+    //Views
+    function adventurers_log(uint) external view returns(uint);
+    function scout(uint) external view returns(uint);
+
+    //Calls
+    function adventure(uint) external;
+}
+
 contract MultiClaimer is UUPSUpgradeable, OwnableUpgradeable{
 
     //Proxy Stuff
@@ -37,6 +46,24 @@ contract MultiClaimer is UUPSUpgradeable, OwnableUpgradeable{
 
         }catch{
 
+        }
+    }
+
+    function multiScout(address cellarAddress, uint[] calldata ids) public view returns (uint[] memory){
+        uint[] memory resArr=new uint[](ids.length);
+        for(uint i=0;i<ids.length;i++){
+            resArr[i]=(Icellar(cellarAddress).scout(ids[i])>0) && (Icellar(cellarAddress).adventurers_log(ids[i]) + 1 days <= block.timestamp) ? ids[i] :0;
+        }
+        return resArr;
+    }
+
+    function multiCellar(address cellarAddress, uint[] calldata ids) external {
+        for(uint i=0;i<ids.length;i++){
+            try Icellar(cellarAddress).adventure(ids[i]){
+
+            }catch{
+
+            }
         }
     }
 }

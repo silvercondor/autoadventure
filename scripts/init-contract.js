@@ -14,21 +14,15 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
-  // We get the contract to deploy
-  const contractAddr=ethers.utils.getAddress("0x17D37847372ce222d5A6f907034537d32168358a")
-
-  const MultiClaimer = await ethers.getContractFactory("MultiClaimer")
-  const multiClaimer = await upgrades.upgradeProxy(contractAddr, MultiClaimer)
-
-  await multiClaimer.deployed();
-
-  const implAddress = await upgrades.erc1967.getImplementationAddress(multiClaimer.address);
+  // We get the contract to deploy  
+  const implAddress = "0xca78725d1f48e9503546436c36c525dc4e6a4e84"
   
   console.log(`implementation address: ${implAddress}`)
-  console.log(`proxy address: ${multiClaimer.address}`)
+  
 
   //uups proxy vulnerability fix
   //More info: https://forum.openzeppelin.com/t/security-advisory-initialize-uups-implementation-contracts/15301
+  
   await initImpl(implAddress)
 }
 

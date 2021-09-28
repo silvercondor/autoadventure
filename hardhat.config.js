@@ -33,8 +33,9 @@ module.exports = {
     hardhat:{},
     fantom:{
       url:"https://rpc.ftm.tools/",
+      // url:"https://rpcapi.fantom.network",
       chainId:250,
-      // gasPrice:153*10**9,
+      // gasPrice:301*10**9,
       accounts:[`0x${process.env.PRD_PRIVATE_KEY}`]
     }
   },
